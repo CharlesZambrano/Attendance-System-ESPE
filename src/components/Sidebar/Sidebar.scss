@@ -43,6 +43,7 @@
       li {
         padding: 10px;
         cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
         &.active {
           background-color: red;
           color: white;
@@ -53,7 +54,7 @@
           color: black;
         }
         &:hover {
-          background-color: lightgray;
+          background-color: #f0f0f0;
         }
       }
     }

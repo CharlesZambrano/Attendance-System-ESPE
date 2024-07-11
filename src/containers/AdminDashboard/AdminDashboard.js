@@ -3,7 +3,19 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import PersonnelTable from "../../components/PersonnelTable/PersonnelTable";
 import "./AdminDashboard.scss";
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ setIsLoading }) => {
+  // Simulación de una operación que tarda tiempo
+  const handleLoadData = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  React.useEffect(() => {
+    handleLoadData();
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <div className="dashboard-content">
