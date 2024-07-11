@@ -1,24 +1,31 @@
 import React from "react";
 import "./Sidebar.scss";
 
-const Sidebar = () => {
-  return (
-    <aside className="sidebar">
-      <div className="user-info">
-        <img src="/assets/images/user-icon.png" alt="User Icon" />
-        <p>Administrador</p>
-      </div>
-      <nav className="menu">
-        <ul>
-          <li className="menu-item active">Personal</li>
-          <li className="menu-item">Registrar nuevo</li>
-          <li className="menu-item">Horarios</li>
-          <li className="menu-item">Reportes</li>
-          <li className="menu-item">Usuarios</li>
-        </ul>
-      </nav>
-    </aside>
-  );
-};
+const Sidebar = ({ selectedMenu }) => (
+  <div className="sidebar">
+    <div className="sidebar__admin">
+      <span className="sidebar__admin-text">Administrador</span>
+    </div>
+    <nav className="sidebar__nav">
+      <ul>
+        <li className={selectedMenu === "personal" ? "active" : ""}>
+          Personal
+        </li>
+        <li className={selectedMenu === "registrar" ? "active" : ""}>
+          Registrar nuevo
+        </li>
+        <li className={selectedMenu === "horarios" ? "active" : ""}>
+          Horarios
+        </li>
+        <li className={selectedMenu === "reportes" ? "active" : ""}>
+          Reportes
+        </li>
+        <li className={selectedMenu === "usuarios" ? "active" : ""}>
+          Usuarios
+        </li>
+      </ul>
+    </nav>
+  </div>
+);
 
 export default Sidebar;

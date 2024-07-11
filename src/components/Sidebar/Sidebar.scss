@@ -1,47 +1,25 @@
 .sidebar {
   width: 250px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  padding: 20px;
-
-  .user-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 16px;
-      color: #333;
+  .sidebar__admin {
+    padding: 10px;
+    .sidebar__admin-text {
+      font-weight: bold;
     }
   }
-
-  .menu {
+  .sidebar__nav {
     ul {
       list-style: none;
       padding: 0;
-      margin: 0;
-
-      .menu-item {
-        padding: 10px 0;
-        cursor: pointer;
-        color: #333;
-        transition: background-color 0.2s;
-
+      li {
+        padding: 10px;
         &.active {
-          background-color: #f8f9fa;
-          font-weight: bold;
+          background-color: red;
+          color: white;
+          font-weight: normal;
         }
-
-        &:hover {
-          background-color: #f0f0f0;
+        &:not(.active) {
+          font-weight: bold;
+          color: black;
         }
       }
     }
