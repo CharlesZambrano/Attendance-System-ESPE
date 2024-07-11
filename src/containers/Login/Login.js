@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.scss";
-import Button from "../../components/Common/Button";
-import Input from "../../components/Common/Input";
 import espeLogo from "../../assets/images/espe-logo.png";
 import deccLogo from "../../assets/images/decc-logo.png";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (event) => {
     event.preventDefault();
-    // Handle login logic here
+    // Aquí puedes añadir la lógica de autenticación
+    navigate("/admin");
   };
 
   return (
@@ -21,30 +20,23 @@ const Login = () => {
           <img src={espeLogo} alt="ESPE Logo" />
           <h2>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN</h2>
           <img src={deccLogo} alt="DECC Logo" />
-          <h2>REGISTRO DE ASISTENCIA</h2>
         </div>
         <div className="login-box">
           <h2>Iniciar Sesión</h2>
           <form onSubmit={handleLogin}>
-            <Input
-              label="Usuario:"
-              type="text"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Input
-              label="Contraseña:"
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button className="login-button" type="submit">
+            <div className="form-group">
+              <label htmlFor="username">Usuario:</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Contraseña:</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" className="login-button">
               Ingresar
-            </Button>
+            </button>
           </form>
-          <a href="#" className="forgot-password">
+          <a href="/forgot-password" className="forgot-password">
             ¿Olvidaste tu contraseña?
           </a>
         </div>

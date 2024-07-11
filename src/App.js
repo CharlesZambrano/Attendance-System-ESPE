@@ -8,6 +8,7 @@ import {
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Login from "./containers/Login/Login";
+import AdminDashboard from "./containers/AdminDashboard/AdminDashboard";
 import "./App.scss";
 
 const AppContent = () => {
@@ -16,10 +17,11 @@ const AppContent = () => {
 
   return (
     <div className="app">
-      {!isLoginPage && <Header />}
+      <Header />
       <main className={isLoginPage ? "login-main" : ""}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           {/* Otros routes aquí */}
         </Routes>
       </main>

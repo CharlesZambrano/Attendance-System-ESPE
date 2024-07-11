@@ -1,0 +1,20 @@
+.personnel-table {
+  margin: 20px;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f8f9fa;
+    }
+  }
+}
