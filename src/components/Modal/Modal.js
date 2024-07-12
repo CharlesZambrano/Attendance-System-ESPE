@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../Button/Button";
 import "./Modal.scss";
 
 const Modal = ({ show, onClose, title, message }) => {
@@ -9,9 +10,7 @@ const Modal = ({ show, onClose, title, message }) => {
       <div className="modal">
         <h2>{title}</h2>
         <p>{message}</p>
-        <button className="modal__close" onClick={onClose}>
-          Cerrar
-        </button>
+        <Button onClick={onClose}>Cerrar</Button>
       </div>
     </div>
   );

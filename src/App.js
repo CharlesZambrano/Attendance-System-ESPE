@@ -37,7 +37,7 @@ const AppContent = () => {
             />
             <Route path="/register-new" element={<RegisterNew />} />
             <Route
-              path="/register-new/cargar-dataset"
+              path="/register-new/upload-dataset"
               element={<CargarDataset />}
             />
             {/* Otros routes aquí */}

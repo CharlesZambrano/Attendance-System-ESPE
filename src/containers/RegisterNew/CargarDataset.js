@@ -40,8 +40,8 @@ const CargarDataset = () => {
     <div className="cargar-dataset">
       <h2>
         <span onClick={() => navigate("/register-new")}>REGISTRAR NUEVO</span>{" "}
-        {">"}
-        Cargar Dataset
+        {" > "}
+        CARGAR DATASET
       </h2>
       <div className="form-group">
         <label htmlFor="file-upload" className="file-label">

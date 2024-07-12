@@ -6,8 +6,16 @@ import "./Card.scss";
 const Card = ({ imageSrc, title, onClick, listItems }) => {
   const navigate = useNavigate();
 
+  const handleClick = () => {
+    if (title === "Cargar Dataset") {
+      navigate("/register-new/upload-dataset");
+    } else {
+      onClick();
+    }
+  };
+
   return (
-    <div className="card" onClick={onClick}>
+    <div className="card" onClick={handleClick}>
       <div className="card__content">
         <img src={imageSrc} alt={title} className="card__image" />
         <div className="card__list">
@@ -18,9 +26,7 @@ const Card = ({ imageSrc, title, onClick, listItems }) => {
           </ul>
         </div>
       </div>
-      <Button onClick={() => navigate("/register-new/cargar-dataset")}>
-        {title}
-      </Button>
+      <Button>{title}</Button>
     </div>
   );
 };
