@@ -40,24 +40,26 @@
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
       li {
-        padding: 10px;
         cursor: pointer;
         transition: background-color 0.3s, color 0.3s;
         a {
+          display: block;
+          padding: 10px;
           text-decoration: none;
           color: inherit;
         }
-        &.active {
+        &.active a {
           background-color: red;
           color: white;
           font-weight: normal;
         }
-        &:not(.active) {
+        &:not(.active) a {
           font-weight: bold;
           color: black;
         }
-        &:hover {
+        &:hover a {
           background-color: #f0f0f0;
         }
       }

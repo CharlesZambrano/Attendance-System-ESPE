@@ -20,7 +20,6 @@ const Sidebar = ({ selectedMenu }) => {
   };
 
   const handleLogout = () => {
-    // Aquí puedes añadir la lógica de cierre de sesión si es necesario
     navigate("/login");
   };
 
@@ -52,20 +51,20 @@ const Sidebar = ({ selectedMenu }) => {
       </div>
       <nav className="sidebar__nav">
         <ul>
-          <li className={selectedMenu === "personal" ? "active" : ""}>
+          <li className={selectedMenu === "admin" ? "active" : ""}>
             <Link to="/admin">Personal</Link>
           </li>
-          <li className={selectedMenu === "registrar" ? "active" : ""}>
+          <li className={selectedMenu === "register-new" ? "active" : ""}>
             <Link to="/register-new">Registrar nuevo</Link>
           </li>
           <li className={selectedMenu === "horarios" ? "active" : ""}>
-            Horarios
+            <Link to="/horarios">Horarios</Link>
           </li>
           <li className={selectedMenu === "reportes" ? "active" : ""}>
-            Reportes
+            <Link to="/reportes">Reportes</Link>
           </li>
           <li className={selectedMenu === "usuarios" ? "active" : ""}>
-            Usuarios
+            <Link to="/usuarios">Usuarios</Link>
           </li>
         </ul>
       </nav>

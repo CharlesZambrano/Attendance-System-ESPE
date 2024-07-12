@@ -18,7 +18,7 @@ const AdminDashboard = ({ setIsLoading }) => {
     <div className="admin-dashboard">
       <div className="dashboard-content">
         <div className="main-content">
-          <h1>PERSONAL</h1>
+          <h2>PERSONAL</h2>
           <PersonnelTable />
         </div>
       </div>
