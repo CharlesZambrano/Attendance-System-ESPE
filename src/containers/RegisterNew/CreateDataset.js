@@ -1,32 +1,23 @@
+// src/containers/RegisterNew/CreateDataset.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
-import Modal from "../../components/Modal/Modal";
 import Input from "../../components/Common/Input";
 import Chip from "../../components/Common/Chip";
-import CardGrid from "../../components/CardGrid/CardGrid";
 import CameraModal from "../../components/CameraModal/CameraModal";
+import CardGrid from "../../components/CardGrid/CardGrid";
 import "./CreateDataset.scss";
 
 const CreateDataset = () => {
-  const [file, setFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: "", message: "" });
-  const [capturedImages, setCapturedImages] = useState([]);
-  const [cameraModal, setCameraModal] = useState(false);
+  const [showCameraModal, setShowCameraModal] = useState(false);
   const [chips, setChips] = useState([
     { label: "Label 1", selected: false },
     { label: "Label 2", selected: false },
     { label: "Label 3", selected: false },
     { label: "Label 4", selected: false },
   ]);
+  const [capturedImages, setCapturedImages] = useState([]);
   const navigate = useNavigate();
-
-  const handleUpload = () => {
-    if (file) {
-      console.log("Archivo subido:", file);
-    }
-  };
 
   const handleChipClick = (index) => {
     setChips(
@@ -36,21 +27,9 @@ const CreateDataset = () => {
     );
   };
 
-  const handleImageClick = (index) => {
-    console.log("Imagen clickeada:", index);
-  };
-
-  const handleImageDelete = (index) => {
-    setCapturedImages(capturedImages.filter((_, i) => i !== index));
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const handleCapture = (imageSrc) => {
+  const handleCaptureImage = (imageSrc) => {
     setCapturedImages([...capturedImages, imageSrc]);
-    setCameraModal(false);
+    setShowCameraModal(false);
   };
 
   return (
@@ -60,15 +39,13 @@ const CreateDataset = () => {
         {" > "}
         CREAR DATASET
       </h2>
-      <div className="form-group">
-        <Input
-          label="Apellidos y Nombres"
-          type="text"
-          name="names"
-          value=""
-          onChange={() => {}}
-        />
-      </div>
+      <Input
+        label="Apellidos y Nombres"
+        type="text"
+        name="names"
+        value=""
+        onChange={() => {}}
+      />
       <div className="filter-chip-carousel">
         {chips.map((chip, index) => (
           <Chip
@@ -79,27 +56,15 @@ const CreateDataset = () => {
           />
         ))}
       </div>
-      <div className="button-group">
-        <Button onClick={() => setCameraModal(true)}>Capturar Foto</Button>
-        <Button onClick={handleUpload}>Entrenar Modelo</Button>
-      </div>
-      <CardGrid
-        images={capturedImages}
-        onImageClick={handleImageClick}
-        onImageDelete={handleImageDelete}
-      />
-
-      <Modal
-        show={showModal}
-        onClose={closeModal}
-        title={modalContent.title}
-        message={modalContent.message}
-      />
-
+      <CardGrid images={capturedImages} />
+      <Button onClick={() => setShowCameraModal(true)}>Capturar Foto</Button>
+      <Button onClick={() => console.log("Entrenar Modelo")}>
+        Entrenar Modelo
+      </Button>
       <CameraModal
-        show={cameraModal}
-        onClose={() => setCameraModal(false)}
-        onCapture={handleCapture}
+        show={showCameraModal}
+        onClose={() => setShowCameraModal(false)}
+        onCapture={handleCaptureImage}
       />
     </div>
   );

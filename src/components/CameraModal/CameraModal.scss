@@ -1,3 +1,4 @@
+// src/components/CameraModal/CameraModal.scss
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -8,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal {
@@ -17,4 +19,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 800px; // Aumentamos el ancho del modal
+  max-width: 90%;
+}
+
+.camera-view {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: black;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between; // Espaciamos los botones
+  width: 100%;
+  gap: 20px; // Añadimos espacio entre los botones
 }
