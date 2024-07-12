@@ -1,3 +1,4 @@
+// src/components/CardGrid/CardGrid.scss
 .card-grid {
   display: flex;
   flex-wrap: wrap;
@@ -9,7 +10,7 @@
     border-radius: 8px;
     padding: 10px;
     width: calc(20% - 10px);
-    text-align: center;
+    text-align: left;
 
     img {
       width: 100%;
@@ -19,13 +20,35 @@
     }
 
     .card-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       p {
         margin: 0;
       }
+
+      .card-info {
+        flex: 1;
+      }
+
+      .delete-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
     }
 
-    button {
-      margin-top: 10px;
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-date {
+      color: #666;
     }
   }
 }

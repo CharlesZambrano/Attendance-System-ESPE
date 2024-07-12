@@ -32,6 +32,14 @@ const CreateDataset = () => {
     setShowCameraModal(false);
   };
 
+  const handleImageClick = (index) => {
+    console.log("Imagen clickeada:", index);
+  };
+
+  const handleImageDelete = (index) => {
+    setCapturedImages(capturedImages.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="create-dataset">
       <h2>
@@ -56,7 +64,11 @@ const CreateDataset = () => {
           />
         ))}
       </div>
-      <CardGrid images={capturedImages} />
+      <CardGrid
+        images={capturedImages}
+        onImageClick={handleImageClick}
+        onImageDelete={handleImageDelete}
+      />
       <Button onClick={() => setShowCameraModal(true)}>Capturar Foto</Button>
       <Button onClick={() => console.log("Entrenar Modelo")}>
         Entrenar Modelo

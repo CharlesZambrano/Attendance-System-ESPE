@@ -1,4 +1,6 @@
+// src/components/CardGrid/CardGrid.js
 import React from "react";
+import icon_eliminar from "../../assets/images/icons-eliminar-64.png";
 import "./CardGrid.scss";
 
 const CardGrid = ({ images, onImageClick, onImageDelete }) => {
@@ -12,10 +14,17 @@ const CardGrid = ({ images, onImageClick, onImageDelete }) => {
             onClick={() => onImageClick(index)}
           />
           <div className="card-content">
-            <p>Title</p>
-            <p>Updated today</p>
+            <div className="card-info">
+              <p className="card-title">Title</p>
+              <p className="card-date">Updated today</p>
+            </div>
+            <button
+              className="delete-button"
+              onClick={() => onImageDelete(index)}
+            >
+              <img src={icon_eliminar} alt="Eliminar" />
+            </button>
           </div>
-          <button onClick={() => onImageDelete(index)}>Eliminar</button>
         </div>
       ))}
     </div>
