@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
 import Modal from "../../components/Modal/Modal";
-import "./CargarDataset.scss";
+import "./UploadDataset.scss";
 
-const CargarDataset = () => {
+const UploadDataset = () => {
   const [file, setFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({ title: "", message: "" });
@@ -78,4 +78,4 @@ const CargarDataset = () => {
   );
 };
 
-export default CargarDataset;
+export default UploadDataset;

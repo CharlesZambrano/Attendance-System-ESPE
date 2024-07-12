@@ -10,7 +10,7 @@ import Footer from "./components/Footer/Footer";
 import Login from "./containers/Login/Login";
 import AdminDashboard from "./containers/AdminDashboard/AdminDashboard";
 import RegisterNew from "./containers/RegisterNew/RegisterNew";
-import CargarDataset from "./containers/RegisterNew/CargarDataset";
+import UploadDataset from "./containers/RegisterNew/UploadDataset";
 import ProgressIndicator from "./components/ProgressIndicator/ProgressIndicator";
 import Sidebar from "./components/Sidebar/Sidebar";
 import "./App.scss";
@@ -38,7 +38,7 @@ const AppContent = () => {
             <Route path="/register-new" element={<RegisterNew />} />
             <Route
               path="/register-new/upload-dataset"
-              element={<CargarDataset />}
+              element={<UploadDataset />}
             />
             {/* Otros routes aquí */}
           </Routes>

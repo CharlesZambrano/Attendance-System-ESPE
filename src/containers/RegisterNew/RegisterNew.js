@@ -1,16 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card/Card";
 import "./RegisterNew.scss";
 import addIcon from "../../assets/images/icons-añadir-64.png";
 import uploadIcon from "../../assets/images/icons-subir-64.png";
 
 const RegisterNew = () => {
+  const navigate = useNavigate();
+
   const handleCreateDataset = () => {
-    // Lógica para redirigir a la página de Crear Dataset
+    navigate("/register-new/create-dataset");
   };
 
   const handleUploadDataset = () => {
-    // Lógica para redirigir a la página de Cargar Dataset
+    navigate("/register-new/upload-dataset");
   };
 
   // Datos simulados de ejemplo
