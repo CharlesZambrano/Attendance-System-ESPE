@@ -1,39 +1,39 @@
 .cargar-dataset {
   padding: 20px;
+
   h2 {
-    cursor: pointer;
+    font-size: 24px;
+    margin-bottom: 20px;
     span {
-      color: black;
+      cursor: pointer;
+      color: #333;
       text-decoration: none;
-      transition: color 0.3s ease;
       &:hover {
-        color: grey;
+        color: #007bff;
       }
     }
   }
+
   .form-group {
     margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 
     .file-label {
-      background-color: #00713d;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: normal;
       cursor: pointer;
-      margin-bottom: 10px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
+
     .file-display {
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
       border: 1px solid #ddd;
-      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: #f9f9f9;
     }
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button/Button";
+import Button from "../Common/Button";
 import "./Modal.scss";
 
 const Modal = ({ show, onClose, title, message }) => {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Common/Button";
+import Input from "../../components/Common/Input";
 import Modal from "../../components/Modal/Modal";
 import "./CargarDataset.scss";
 
@@ -8,6 +9,7 @@ const CargarDataset = () => {
   const [file, setFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({ title: "", message: "" });
+  const [nombre, setNombre] = useState("");
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
@@ -58,10 +60,13 @@ const CargarDataset = () => {
           {file ? file.name : "No se ha seleccionado ningún archivo"}
         </div>
       </div>
-      <div className="form-group">
-        <label>Apellidos y Nombres</label>
-        <input type="text" placeholder="Apellidos y Nombres" />
-      </div>
+      <Input
+        label="Apellidos y Nombres"
+        type="text"
+        name="nombre"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+      />
       <Button onClick={handleUpload}>Entrenar Modelo</Button>
       <Modal
         show={showModal}
