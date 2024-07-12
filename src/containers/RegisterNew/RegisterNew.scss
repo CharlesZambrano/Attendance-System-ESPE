@@ -6,7 +6,7 @@
   &__cards {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
+    margin-bottom: 30px; // Incrementar el margen inferior
   }
   &__table {
     margin-top: 20px;
@@ -20,6 +20,12 @@
       }
       th {
         background-color: #f4f4f4;
+      }
+      tr {
+        transition: background-color 0.3s ease;
+        &:hover {
+          background-color: #f0f0f0;
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../Button/Button";
 import "./Card.scss";
 
 const Card = ({ imageSrc, title, onClick, listItems }) => (
@@ -13,7 +14,7 @@ const Card = ({ imageSrc, title, onClick, listItems }) => (
         </ul>
       </div>
     </div>
-    <button className="card__button">{title}</button>
+    <Button onClick={onClick}>{title}</Button>
   </div>
 );
 
