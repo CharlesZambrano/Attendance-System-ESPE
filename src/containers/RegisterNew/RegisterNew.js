@@ -27,11 +27,13 @@ const RegisterNew = () => {
           imageSrc={addIcon}
           title="Crear Dataset"
           onClick={handleCreateDataset}
+          listItems={["LOREM IPSUM", "LOREM IPSUM", "LOREM IPSUM"]}
         />
         <Card
           imageSrc={uploadIcon}
           title="Cargar Dataset"
           onClick={handleUploadDataset}
+          listItems={["LOREM IPSUM", "LOREM IPSUM", "LOREM IPSUM"]}
         />
       </div>
       <div className="register-new__table">
