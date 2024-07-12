@@ -1,0 +1,30 @@
+.cargar-dataset {
+  padding: 20px;
+  h2 {
+    cursor: pointer;
+    span {
+      color: #00713d;
+      text-decoration: underline;
+    }
+  }
+  .form-group {
+    margin-bottom: 20px;
+    .file-label {
+      background-color: #00713d;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .file-display {
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import Footer from "./components/Footer/Footer";
 import Login from "./containers/Login/Login";
 import AdminDashboard from "./containers/AdminDashboard/AdminDashboard";
 import RegisterNew from "./containers/RegisterNew/RegisterNew";
+import CargarDataset from "./containers/RegisterNew/CargarDataset";
 import ProgressIndicator from "./components/ProgressIndicator/ProgressIndicator";
 import Sidebar from "./components/Sidebar/Sidebar";
 import "./App.scss";
@@ -35,6 +36,10 @@ const AppContent = () => {
               element={<AdminDashboard setIsLoading={setIsLoading} />}
             />
             <Route path="/register-new" element={<RegisterNew />} />
+            <Route
+              path="/register-new/cargar-dataset"
+              element={<CargarDataset />}
+            />
             {/* Otros routes aquí */}
           </Routes>
         </main>
