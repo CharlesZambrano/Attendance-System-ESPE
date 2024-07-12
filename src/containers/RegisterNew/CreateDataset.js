@@ -1,89 +1,124 @@
-import React, { useState } from "react";
-import Input from "../../components/Common/Input";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import Modal from "../../components/Modal/Modal";
-import Camera from "react-camera-pro";
+import Input from "../../components/Common/Input";
+import Chip from "../../components/Chip/Chip";
+import { Camera } from "react-camera-pro";
 import "./CreateDataset.scss";
 
 const CreateDataset = () => {
-  const [name, setName] = useState("");
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [showCamera, setShowCamera] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [filterChips, setFilterChips] = useState([
-    "Label 1",
-    "Label 2",
-    "Label 3",
+  const [file, setFile] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: "", message: "" });
+  const [capturedImages, setCapturedImages] = useState([]);
+  const [cameraModal, setCameraModal] = useState(false);
+  const [chips, setChips] = useState([
+    { label: "Label 1", selected: false },
+    { label: "Label 2", selected: false },
+    { label: "Label 3", selected: false },
+    { label: "Label 4", selected: false },
   ]);
+  const cameraRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleNameChange = (e) => setName(e.target.value);
-
-  const handleCapture = (img) => {
-    setCapturedImage(img);
+  const handleCapture = () => {
+    if (cameraRef.current) {
+      const imageSrc = cameraRef.current.takePhoto();
+      setCapturedImages([...capturedImages, imageSrc]);
+      setCameraModal(false);
+    }
   };
 
-  const handleAddImage = () => {
-    setSelectedImages([
-      ...selectedImages,
-      { src: capturedImage, title: "New Image", date: new Date() },
-    ]);
-    setShowCamera(false);
+  const handleUpload = () => {
+    if (file) {
+      console.log("Archivo subido:", file);
+    }
   };
 
-  const handleDeleteImage = (index) => {
-    setSelectedImages(selectedImages.filter((_, i) => i !== index));
+  const handleChipClick = (index) => {
+    setChips(
+      chips.map((chip, i) =>
+        i === index ? { ...chip, selected: !chip.selected } : chip
+      )
+    );
+  };
+
+  const handleImageClick = (index) => {
+    console.log("Imagen clickeada:", index);
+  };
+
+  const handleImageDelete = (index) => {
+    setCapturedImages(capturedImages.filter((_, i) => i !== index));
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (
     <div className="create-dataset">
-      <h2>Registrar nuevo {">"} Crear Dataset</h2>
-      <Input
-        label="Apellidos y Nombres"
-        type="text"
-        name="name"
-        value={name}
-        onChange={handleNameChange}
-      />
-
+      <h2>
+        <span onClick={() => navigate("/register-new")}>REGISTRAR NUEVO</span>{" "}
+        {" > "}
+        CREAR DATASET
+      </h2>
+      <div className="form-group">
+        <Input
+          label="Apellidos y Nombres"
+          type="text"
+          name="names"
+          value=""
+          onChange={() => {}}
+        />
+      </div>
       <div className="filter-chip-carousel">
-        {filterChips.map((chip, index) => (
-          <div key={index} className="chip">
-            {chip}
-          </div>
+        {chips.map((chip, index) => (
+          <Chip
+            key={index}
+            label={chip.label}
+            selected={chip.selected}
+            onClick={() => handleChipClick(index)}
+          />
         ))}
       </div>
-
+      <div className="button-group">
+        <Button onClick={() => setCameraModal(true)}>Capturar Foto</Button>
+        <Button onClick={handleUpload}>Entrenar Modelo</Button>
+      </div>
       <div className="card-grid">
-        {selectedImages.map((image, index) => (
-          <div key={index} className="card">
+        {capturedImages.map((src, index) => (
+          <div className="card" key={index}>
             <img
-              src={image.src || "assets/no-image.png"}
-              alt="No preview available"
+              src={src || "no-image.png"}
+              alt={`Imagen ${index}`}
+              onClick={() => handleImageClick(index)}
             />
             <div className="card-content">
-              <p>{image.title}</p>
-              <p>{image.date.toLocaleDateString()}</p>
+              <p>Title</p>
+              <p>Updated today</p>
             </div>
-            <Button onClick={() => handleDeleteImage(index)}>Eliminar</Button>
+            <button onClick={() => handleImageDelete(index)}>Eliminar</button>
           </div>
         ))}
       </div>
 
-      <Button onClick={() => setShowCamera(true)}>Capturar Foto</Button>
-
       <Modal
-        show={showCamera}
-        onClose={() => setShowCamera(false)}
-        title="Capturar Imagen"
-      >
-        <Camera onTakePhoto={(dataUri) => handleCapture(dataUri)} />
-        <Button onClick={handleAddImage}>Añadir Imagen</Button>
-        <Button onClick={() => setShowCamera(false)}>Cancelar</Button>
-      </Modal>
+        show={showModal}
+        onClose={closeModal}
+        title={modalContent.title}
+        message={modalContent.message}
+      />
 
-      <Button onClick={() => console.log("Entrenar Modelo")}>
-        Entrenar Modelo
-      </Button>
+      {cameraModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <Camera ref={cameraRef} />
+            <Button onClick={handleCapture}>Capturar</Button>
+            <Button onClick={() => setCameraModal(false)}>Cancelar</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
