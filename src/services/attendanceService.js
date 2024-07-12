@@ -1,11 +1,11 @@
-import api from './api';
+import api from "./api";
 
 export const getAttendance = async () => {
   try {
-    const response = await api.get('/attendance');
+    const response = await api.get("/attendance");
     return response.data;
   } catch (error) {
-    console.error('Error fetching attendance:', error);
+    console.error("Error fetching attendance:", error);
     throw error;
   }
 };

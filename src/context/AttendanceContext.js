@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { getAttendance } from '../services/attendanceService';
+import React, { createContext, useState, useEffect } from "react";
+import { getAttendance } from "../services/attendanceService";
 
 export const AttendanceContext = createContext();
 
