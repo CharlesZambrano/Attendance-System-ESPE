@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import Modal from "../../components/Modal/Modal";
 import Input from "../../components/Common/Input";
-import Chip from "../../components/Chip/Chip";
-import { Camera } from "react-camera-pro";
+import Chip from "../../components/Common/Chip";
+import CardGrid from "../../components/CardGrid/CardGrid";
+import CameraModal from "../../components/CameraModal/CameraModal";
 import "./CreateDataset.scss";
 
 const CreateDataset = () => {
@@ -19,16 +20,7 @@ const CreateDataset = () => {
     { label: "Label 3", selected: false },
     { label: "Label 4", selected: false },
   ]);
-  const cameraRef = useRef(null);
   const navigate = useNavigate();
-
-  const handleCapture = () => {
-    if (cameraRef.current) {
-      const imageSrc = cameraRef.current.takePhoto();
-      setCapturedImages([...capturedImages, imageSrc]);
-      setCameraModal(false);
-    }
-  };
 
   const handleUpload = () => {
     if (file) {
@@ -54,6 +46,11 @@ const CreateDataset = () => {
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const handleCapture = (imageSrc) => {
+    setCapturedImages([...capturedImages, imageSrc]);
+    setCameraModal(false);
   };
 
   return (
@@ -86,22 +83,11 @@ const CreateDataset = () => {
         <Button onClick={() => setCameraModal(true)}>Capturar Foto</Button>
         <Button onClick={handleUpload}>Entrenar Modelo</Button>
       </div>
-      <div className="card-grid">
-        {capturedImages.map((src, index) => (
-          <div className="card" key={index}>
-            <img
-              src={src || "no-image.png"}
-              alt={`Imagen ${index}`}
-              onClick={() => handleImageClick(index)}
-            />
-            <div className="card-content">
-              <p>Title</p>
-              <p>Updated today</p>
-            </div>
-            <button onClick={() => handleImageDelete(index)}>Eliminar</button>
-          </div>
-        ))}
-      </div>
+      <CardGrid
+        images={capturedImages}
+        onImageClick={handleImageClick}
+        onImageDelete={handleImageDelete}
+      />
 
       <Modal
         show={showModal}
@@ -110,15 +96,11 @@ const CreateDataset = () => {
         message={modalContent.message}
       />
 
-      {cameraModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <Camera ref={cameraRef} />
-            <Button onClick={handleCapture}>Capturar</Button>
-            <Button onClick={() => setCameraModal(false)}>Cancelar</Button>
-          </div>
-        </div>
-      )}
+      <CameraModal
+        show={cameraModal}
+        onClose={() => setCameraModal(false)}
+        onCapture={handleCapture}
+      />
     </div>
   );
 };
