@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Sidebar.scss";
 import userLogo from "../../assets/images/user-logo.jpg";
 import logoutIcon from "../../assets/images/icons-salida-32.png";
@@ -53,10 +53,10 @@ const Sidebar = ({ selectedMenu }) => {
       <nav className="sidebar__nav">
         <ul>
           <li className={selectedMenu === "personal" ? "active" : ""}>
-            Personal
+            <Link to="/admin">Personal</Link>
           </li>
           <li className={selectedMenu === "registrar" ? "active" : ""}>
-            Registrar nuevo
+            <Link to="/register-new">Registrar nuevo</Link>
           </li>
           <li className={selectedMenu === "horarios" ? "active" : ""}>
             Horarios

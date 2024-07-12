@@ -9,7 +9,9 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Login from "./containers/Login/Login";
 import AdminDashboard from "./containers/AdminDashboard/AdminDashboard";
+import RegisterNew from "./containers/RegisterNew/RegisterNew";
 import ProgressIndicator from "./components/ProgressIndicator/ProgressIndicator";
+import Sidebar from "./components/Sidebar/Sidebar";
 import "./App.scss";
 
 const AppContent = () => {
@@ -21,16 +23,22 @@ const AppContent = () => {
     <div className="app">
       <ProgressIndicator isLoading={isLoading} />
       <Header />
-      <main className={isLoginPage ? "login-main" : ""}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/admin"
-            element={<AdminDashboard setIsLoading={setIsLoading} />}
-          />
-          {/* Otros routes aquí */}
-        </Routes>
-      </main>
+      <div className="app-content">
+        {!isLoginPage && (
+          <Sidebar selectedMenu={location.pathname.split("/")[1]} />
+        )}
+        <main className={isLoginPage ? "login-main" : "main-content"}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/admin"
+              element={<AdminDashboard setIsLoading={setIsLoading} />}
+            />
+            <Route path="/register-new" element={<RegisterNew />} />
+            {/* Otros routes aquí */}
+          </Routes>
+        </main>
+      </div>
       <Footer />
     </div>
   );

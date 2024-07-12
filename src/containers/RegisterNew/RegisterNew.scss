@@ -1,0 +1,23 @@
+.register-new {
+  padding: 20px;
+  &__cards {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  &__table {
+    margin-top: 20px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+}
