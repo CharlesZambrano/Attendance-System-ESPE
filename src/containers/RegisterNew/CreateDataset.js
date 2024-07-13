@@ -93,11 +93,13 @@ const CreateDataset = () => {
           />
         ))}
       </div>
-      <CardGrid
-        images={capturedImages}
-        onImageClick={handleImageClick}
-        onImageDelete={handleImageDelete}
-      />
+      <div className="card-grid-container">
+        <CardGrid
+          images={capturedImages}
+          onImageClick={handleImageClick}
+          onImageDelete={handleImageDelete}
+        />
+      </div>
       <div className="button-group">
         <Button onClick={() => setShowCameraModal(true)}>Capturar Foto</Button>
         <Button onClick={() => console.log("Entrenar Modelo")}>
