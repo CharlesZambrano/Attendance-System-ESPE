@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../components/Common/Input"; // Asegúrate de que la ruta es correcta
-import Button from "../../components/Common/Button"; // Asegúrate de que la ruta es correcta
+import Input from "../../components/Common/Input";
+import Button from "../../components/Common/Button";
 import "./Login.scss";
 import espeLogo from "../../assets/images/espe-logo.png";
 import deccLogo from "../../assets/images/decc-logo.png";

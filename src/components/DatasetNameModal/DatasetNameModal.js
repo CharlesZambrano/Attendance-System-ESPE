@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "../Common/Button";
+import Input from "../../components/Common/Input";
 import "./DatasetNameModal.scss";
 
 const DatasetNameModal = ({ show, onClose, onConfirm }) => {
@@ -25,7 +26,7 @@ const DatasetNameModal = ({ show, onClose, onConfirm }) => {
       <div className="modal">
         <h2>Ingrese el nombre del Dataset</h2>
         <form onSubmit={handleConfirm}>
-          <input
+          <Input
             type="text"
             value={datasetName}
             onChange={(e) => setDatasetName(e.target.value)}
