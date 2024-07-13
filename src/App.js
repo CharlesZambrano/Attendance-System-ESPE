@@ -24,7 +24,7 @@ const AppContent = () => {
   return (
     <div className="app">
       <ProgressIndicator isLoading={isLoading} />
-      <Header />
+      {!isLoginPage && <Header />}
       <div className="app-content">
         {!isLoginPage && (
           <Sidebar selectedMenu={location.pathname.split("/")[1]} />

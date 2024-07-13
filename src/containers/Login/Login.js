@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Input from "../../components/Common/Input"; // Asegúrate de que la ruta es correcta
+import Button from "../../components/Common/Button"; // Asegúrate de que la ruta es correcta
 import "./Login.scss";
 import espeLogo from "../../assets/images/espe-logo.png";
 import deccLogo from "../../assets/images/decc-logo.png";
@@ -24,17 +26,14 @@ const Login = () => {
         <div className="login-box">
           <h2>Iniciar Sesión</h2>
           <form onSubmit={handleLogin}>
-            <div className="form-group">
-              <label htmlFor="username">Usuario:</label>
-              <input type="text" id="username" name="username" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Contraseña:</label>
-              <input type="password" id="password" name="password" required />
-            </div>
-            <button type="submit" className="login-button">
-              Ingresar
-            </button>
+            <Input label="Usuario:" type="text" name="username" required />
+            <Input
+              label="Contraseña:"
+              type="password"
+              name="password"
+              required
+            />
+            <Button type="submit">Ingresar</Button>
           </form>
           <a href="/forgot-password" className="forgot-password">
             ¿Olvidaste tu contraseña?

@@ -6,6 +6,8 @@
   background-color: #f0f2f5;
   margin: 0;
   padding: 0;
+  width: 100%; // Aseguramos que el contenedor ocupe toda la pantalla
+  overflow: hidden; // Aseguramos que no haya scroll innecesario
 }
 
 .login-content {
@@ -14,6 +16,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  max-width: 100%; // Aseguramos que el contenido no se desborde
 }
 
 .login-info {
