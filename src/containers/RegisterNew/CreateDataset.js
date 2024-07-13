@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
 import Chip from "../../components/Common/Chip";
@@ -18,8 +18,20 @@ const CreateDataset = () => {
   const [capturedImages, setCapturedImages] = useState([]);
   const { state } = useLocation();
   const { datasetName } = state || { datasetName: "" };
-  const [imageCounter, setImageCounter] = useState(1);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Replace spaces with underscores
+    if (datasetName) {
+      const sanitizedDatasetName = datasetName.replace(/ /g, "_");
+      setCapturedImages((prevImages) =>
+        prevImages.map((image, index) => ({
+          ...image,
+          title: `${sanitizedDatasetName}_${index + 1}`,
+        }))
+      );
+    }
+  }, [datasetName]);
 
   const handleChipClick = (index) => {
     setChips(
@@ -30,14 +42,14 @@ const CreateDataset = () => {
   };
 
   const handleCaptureImage = (imageSrc) => {
+    const sanitizedDatasetName = datasetName.replace(/ /g, "_");
     const currentDate = new Date().toISOString().split("T")[0];
     const newImage = {
       src: imageSrc,
-      title: `${datasetName} ${imageCounter}`,
+      title: `${sanitizedDatasetName}_${capturedImages.length + 1}`,
       date: currentDate,
     };
     setCapturedImages([...capturedImages, newImage]);
-    setImageCounter(imageCounter + 1);
     setShowCameraModal(false);
   };
 
@@ -46,7 +58,15 @@ const CreateDataset = () => {
   };
 
   const handleImageDelete = (index) => {
-    setCapturedImages(capturedImages.filter((_, i) => i !== index));
+    const sanitizedDatasetName = datasetName.replace(/ /g, "_");
+    setCapturedImages((prevImages) =>
+      prevImages
+        .filter((_, i) => i !== index)
+        .map((image, i) => ({
+          ...image,
+          title: `${sanitizedDatasetName}_${i + 1}`,
+        }))
+    );
   };
 
   return (
