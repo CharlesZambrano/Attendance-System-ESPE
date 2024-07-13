@@ -9,7 +9,7 @@ const Input = ({
   onChange,
   readOnly = false,
   required = false,
-  placeholder = false,
+  placeholder = "",
 }) => (
   <div className="form-group">
     <label htmlFor={name}>{label}</label>
@@ -21,7 +21,7 @@ const Input = ({
       onChange={onChange}
       readOnly={readOnly}
       required={required}
-      placeholder={placeholder}
+      placeholder={placeholder || undefined}
     />
   </div>
 );
