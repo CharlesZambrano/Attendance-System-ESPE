@@ -64,6 +64,7 @@ const UploadDataset = () => {
         label="Apellidos y Nombres"
         type="text"
         name="nombre"
+        placeholder="Ingresar los Apellidos y Nombres"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
       />

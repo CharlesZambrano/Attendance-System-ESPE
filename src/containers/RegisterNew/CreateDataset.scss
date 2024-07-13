@@ -27,6 +27,65 @@
   .button-group {
     display: flex;
     gap: 10px;
+    margin-top: 20px;
     margin-bottom: 20px;
+  }
+}
+
+.custom-button {
+  margin-bottom: 10px; // Asegurar que haya un margen inferior entre los botones
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: calc(20% - 10px);
+    text-align: left;
+
+    img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .card-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      p {
+        margin: 0;
+      }
+
+      .card-info {
+        flex: 1;
+      }
+
+      .delete-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-date {
+      color: #666;
+    }
   }
 }

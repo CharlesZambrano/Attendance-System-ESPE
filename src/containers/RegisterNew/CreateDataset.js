@@ -21,7 +21,6 @@ const CreateDataset = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Replace spaces with underscores
     if (datasetName) {
       const sanitizedDatasetName = datasetName.replace(/ /g, "_");
       setCapturedImages((prevImages) =>
@@ -99,10 +98,12 @@ const CreateDataset = () => {
         onImageClick={handleImageClick}
         onImageDelete={handleImageDelete}
       />
-      <Button onClick={() => setShowCameraModal(true)}>Capturar Foto</Button>
-      <Button onClick={() => console.log("Entrenar Modelo")}>
-        Entrenar Modelo
-      </Button>
+      <div className="button-group">
+        <Button onClick={() => setShowCameraModal(true)}>Capturar Foto</Button>
+        <Button onClick={() => console.log("Entrenar Modelo")}>
+          Entrenar Modelo
+        </Button>
+      </div>
       <CameraModal
         show={showCameraModal}
         onClose={() => setShowCameraModal(false)}
