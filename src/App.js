@@ -22,7 +22,7 @@ const AppContent = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="app">
+    <div className={`app ${isLoginPage ? "login-page" : ""}`}>
       <ProgressIndicator isLoading={isLoading} />
       {!isLoginPage && <Header />}
       <div className="app-content">
