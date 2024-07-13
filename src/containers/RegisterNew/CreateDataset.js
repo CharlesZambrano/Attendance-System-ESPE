@@ -1,6 +1,5 @@
-// src/containers/RegisterNew/CreateDataset.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
 import Chip from "../../components/Common/Chip";
@@ -17,6 +16,9 @@ const CreateDataset = () => {
     { label: "Label 4", selected: false },
   ]);
   const [capturedImages, setCapturedImages] = useState([]);
+  const { state } = useLocation();
+  const { datasetName } = state || { datasetName: "" };
+  const [imageCounter, setImageCounter] = useState(1);
   const navigate = useNavigate();
 
   const handleChipClick = (index) => {
@@ -28,7 +30,14 @@ const CreateDataset = () => {
   };
 
   const handleCaptureImage = (imageSrc) => {
-    setCapturedImages([...capturedImages, imageSrc]);
+    const currentDate = new Date().toISOString().split("T")[0];
+    const newImage = {
+      src: imageSrc,
+      title: `${datasetName} ${imageCounter}`,
+      date: currentDate,
+    };
+    setCapturedImages([...capturedImages, newImage]);
+    setImageCounter(imageCounter + 1);
     setShowCameraModal(false);
   };
 
@@ -51,8 +60,9 @@ const CreateDataset = () => {
         label="Apellidos y Nombres"
         type="text"
         name="names"
-        value=""
+        value={datasetName}
         onChange={() => {}}
+        readOnly
       />
       <div className="filter-chip-carousel">
         {chips.map((chip, index) => (

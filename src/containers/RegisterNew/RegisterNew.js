@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card/Card";
+import DatasetNameModal from "../../components/DatasetNameModal/DatasetNameModal";
 import "./RegisterNew.scss";
 import addIcon from "../../assets/images/icons-añadir-64.png";
 import uploadIcon from "../../assets/images/icons-subir-64.png";
 
 const RegisterNew = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [datasetName, setDatasetName] = useState("");
   const navigate = useNavigate();
 
   const handleCreateDataset = () => {
-    navigate("/register-new/create-dataset");
+    setShowModal(true);
+  };
+
+  const handleConfirm = (name) => {
+    setDatasetName(name);
+    setShowModal(false);
+    navigate("/register-new/create-dataset", { state: { datasetName: name } });
   };
 
   const handleUploadDataset = () => {
@@ -60,6 +69,11 @@ const RegisterNew = () => {
           </tbody>
         </table>
       </div>
+      <DatasetNameModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 };
