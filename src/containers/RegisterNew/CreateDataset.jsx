@@ -83,12 +83,16 @@ const CreateDataset = () => {
     const expressionCode = expressions[currentStep % expressions.length].code;
     const currentDate = new Date().toISOString().split("T")[0];
 
+    // Generar un ID único para el grupo de tres imágenes
+    const groupId = `${sanitizedDatasetName}_${accessoryCode}_${expressionCode}_${new Date().getTime()}`;
+
     const newImages = Array.from({ length: 3 }, (_, i) => ({
       src: imageSrc,
       title: `${sanitizedDatasetName}_${accessoryCode}_${expressionCode}_${
         capturedImages.length + i + 1
       }`,
       date: currentDate,
+      groupId, // Agregar el groupId único
     }));
 
     setCapturedImages([...capturedImages, ...newImages]);
@@ -104,23 +108,45 @@ const CreateDataset = () => {
     if (expressions[expressionIndex] && selectedAccessories[accessoryIndex]) {
       return `${selectedAccessories[accessoryIndex].label} ${expressions[expressionIndex].label}`;
     }
-    return null; // Retornar null cuando todas las capturas están completas
+    return null;
+  };
+
+  const getNextMissingStep = () => {
+    for (let i = 0; i < selectedAccessories.length; i++) {
+      for (let j = 0; j < expressions.length; j++) {
+        const accessoryCode = selectedAccessories[i].code;
+        const expressionCode = expressions[j].code;
+        const matchingImages = capturedImages.filter((image) =>
+          image.title.includes(`_${accessoryCode}_${expressionCode}_`)
+        );
+        if (matchingImages.length < 3) {
+          return i * expressions.length + j;
+        }
+      }
+    }
+    return null;
   };
 
   const handleImageDelete = (index) => {
-    const deletedTitle = capturedImages[index].title;
-    const [dataset, accessoryCode, expressionCode] = deletedTitle
-      .split("_")
-      .slice(0, 3);
+    const groupIdToDelete = capturedImages[index].groupId;
 
+    console.log(`Attempting to delete images with groupId: ${groupIdToDelete}`);
+    console.log(`Current capturedImages before deletion:`, capturedImages);
+
+    // Eliminar solo las imágenes que coincidan con el groupId
     const newImages = capturedImages.filter(
-      (image) =>
-        !image.title.startsWith(`${dataset}_${accessoryCode}_${expressionCode}`)
+      (image) => image.groupId !== groupIdToDelete
     );
 
     setCapturedImages(newImages);
-    setCurrentStep((prevStep) => prevStep - 1);
-    console.log("Image deleted:", deletedTitle);
+
+    console.log(`Deleted images with groupId: ${groupIdToDelete}`);
+    console.log(`Current capturedImages after deletion:`, newImages);
+
+    const nextMissingStep = getNextMissingStep();
+    if (nextMissingStep !== null) {
+      setCurrentStep(nextMissingStep);
+    }
   };
 
   const validateDataset = () => {
@@ -144,7 +170,6 @@ const CreateDataset = () => {
       setValidationMessage(validationError);
     } else {
       setValidationMessage("Captura del Dataset completada, guardelo");
-      // Lógica para guardar el dataset
       console.log("Dataset guardado exitosamente");
     }
   };
@@ -154,8 +179,9 @@ const CreateDataset = () => {
   };
 
   const handleCaptureButtonClick = () => {
-    const instruction = getCurrentInstruction();
-    if (instruction) {
+    const nextMissingStep = getNextMissingStep();
+    if (nextMissingStep !== null) {
+      setCurrentStep(nextMissingStep);
       setShowCameraModal(true);
     } else {
       setValidationMessage("Captura del Dataset completada, guardelo");
