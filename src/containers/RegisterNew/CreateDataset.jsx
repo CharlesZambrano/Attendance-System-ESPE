@@ -46,10 +46,9 @@ const CreateDataset = () => {
     accessories: [],
   };
   const navigate = useNavigate();
-  const selectedAccessories = [
-    { label: "Sin Accesorios", code: "NO_ACC" },
-    ...accessories.filter((acc) => selectedAccessoryCodes.includes(acc.code)),
-  ];
+  const selectedAccessories = accessories.filter((acc) =>
+    selectedAccessoryCodes.includes(acc.code)
+  );
 
   useEffect(() => {
     if (datasetName) {
@@ -65,15 +64,14 @@ const CreateDataset = () => {
 
   const handleCaptureImage = (imageSrc) => {
     const sanitizedDatasetName = datasetName.replace(/ /g, "_");
-    const expressionCode =
-      expressions[Math.floor(currentStep / selectedAccessories.length)].code;
     const accessoryCode =
-      selectedAccessories[currentStep % selectedAccessories.length].code;
+      selectedAccessories[Math.floor(currentStep / expressions.length)].code;
+    const expressionCode = expressions[currentStep % expressions.length].code;
     const currentDate = new Date().toISOString().split("T")[0];
 
     const newImages = Array.from({ length: 3 }, (_, i) => ({
       src: imageSrc,
-      title: `${sanitizedDatasetName}_${expressionCode}_${accessoryCode}_${
+      title: `${sanitizedDatasetName}_${accessoryCode}_${expressionCode}_${
         capturedImages.length + i + 1
       }`,
       date: currentDate,
@@ -87,25 +85,23 @@ const CreateDataset = () => {
   };
 
   const getCurrentInstruction = () => {
-    const expressionIndex = Math.floor(
-      currentStep / selectedAccessories.length
-    );
-    const accessoryIndex = currentStep % selectedAccessories.length;
+    const accessoryIndex = Math.floor(currentStep / expressions.length);
+    const expressionIndex = currentStep % expressions.length;
     if (expressions[expressionIndex] && selectedAccessories[accessoryIndex]) {
-      return `${expressions[expressionIndex].label} ${selectedAccessories[accessoryIndex].label}`;
+      return `${selectedAccessories[accessoryIndex].label} ${expressions[expressionIndex].label}`;
     }
     return null; // Retornar null cuando todas las capturas están completas
   };
 
   const handleImageDelete = (index) => {
     const deletedTitle = capturedImages[index].title;
-    const [dataset, expressionCode, accessoryCode] = deletedTitle
+    const [dataset, accessoryCode, expressionCode] = deletedTitle
       .split("_")
       .slice(0, 3);
 
     const newImages = capturedImages.filter(
       (image) =>
-        !image.title.startsWith(`${dataset}_${expressionCode}_${accessoryCode}`)
+        !image.title.startsWith(`${dataset}_${accessoryCode}_${expressionCode}`)
     );
 
     setCapturedImages(newImages);
@@ -114,14 +110,14 @@ const CreateDataset = () => {
   };
 
   const validateDataset = () => {
-    for (const expression of expressions) {
-      for (const accessory of selectedAccessories) {
+    for (const accessory of selectedAccessories) {
+      for (const expression of expressions) {
         const matchingImages = capturedImages.filter((image) =>
-          image.title.includes(`_${expression.code}_${accessory.code}_`)
+          image.title.includes(`_${accessory.code}_${expression.code}_`)
         );
 
         if (matchingImages.length < 3) {
-          return `Faltan imágenes para ${expression.label} ${accessory.label}`;
+          return `Faltan imágenes para ${accessory.label} ${expression.label}`;
         }
       }
     }
