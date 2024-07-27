@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import addIcon from "../../assets/images/icons-añadir-64.png";
+import uploadIcon from "../../assets/images/icons-subir-64.png";
 import Card from "../../components/Card/Card";
 import DatasetNameModal from "../../components/DatasetNameModal/DatasetNameModal";
 import "./RegisterNew.scss";
-import addIcon from "../../assets/images/icons-añadir-64.png";
-import uploadIcon from "../../assets/images/icons-subir-64.png";
 
 const RegisterNew = () => {
   const [showModal, setShowModal] = useState(false);

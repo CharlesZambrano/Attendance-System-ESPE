@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Common/Button";
-import Input from "../../components/Common/Input";
+import Input from "../Common/Input";
 import "./DatasetNameModal.scss";
 
 const DatasetNameModal = ({ show, onClose, onConfirm }) => {
