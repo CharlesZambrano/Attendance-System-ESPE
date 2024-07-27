@@ -1,5 +1,3 @@
-// src/containers/RegisterNew/CreateDataset.jsx
-
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraModal from "../../components/CameraModal/CameraModal";
@@ -24,6 +22,7 @@ const expressions = [
 ];
 
 const accessories = [
+  { label: "Sin Accesorios", code: "NO_ACC" },
   { label: "Con gafas transparentes", code: "TRA" },
   { label: "Con gafas de sol", code: "SOL" },
   { label: "Con sombrero", code: "SOM" },
@@ -47,9 +46,10 @@ const CreateDataset = () => {
     accessories: [],
   };
   const navigate = useNavigate();
-  const selectedAccessories = accessories.filter((acc) =>
-    selectedAccessoryCodes.includes(acc.code)
-  );
+  const selectedAccessories = [
+    { label: "Sin Accesorios", code: "NO_ACC" },
+    ...accessories.filter((acc) => selectedAccessoryCodes.includes(acc.code)),
+  ];
 
   useEffect(() => {
     if (datasetName) {

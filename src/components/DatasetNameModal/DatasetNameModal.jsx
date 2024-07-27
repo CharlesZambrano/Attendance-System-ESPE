@@ -4,6 +4,7 @@ import Input from "../Common/Input";
 import "./DatasetNameModal.scss";
 
 const accessories = [
+  { label: "Sin Accesorios", code: "NO_ACC" },
   { label: "Gafas transparentes", code: "TRA" },
   { label: "Gafas de sol", code: "SOL" },
   { label: "Sombrero", code: "SOM" },
@@ -15,12 +16,12 @@ const accessories = [
 
 const DatasetNameModal = ({ show, onClose, onConfirm }) => {
   const [datasetName, setDatasetName] = useState("");
-  const [selectedAccessories, setSelectedAccessories] = useState([]);
+  const [selectedAccessories, setSelectedAccessories] = useState(["NO_ACC"]);
 
   useEffect(() => {
     if (!show) {
       setDatasetName("");
-      setSelectedAccessories([]);
+      setSelectedAccessories(["NO_ACC"]);
     }
   }, [show]);
 
@@ -32,11 +33,13 @@ const DatasetNameModal = ({ show, onClose, onConfirm }) => {
   };
 
   const toggleAccessorySelection = (accessoryCode) => {
-    setSelectedAccessories((prevSelected) =>
-      prevSelected.includes(accessoryCode)
-        ? prevSelected.filter((code) => code !== accessoryCode)
-        : [...prevSelected, accessoryCode]
-    );
+    if (accessoryCode !== "NO_ACC") {
+      setSelectedAccessories((prevSelected) =>
+        prevSelected.includes(accessoryCode)
+          ? prevSelected.filter((code) => code !== accessoryCode)
+          : [...prevSelected, accessoryCode]
+      );
+    }
   };
 
   if (!show) return null;
@@ -60,6 +63,7 @@ const DatasetNameModal = ({ show, onClose, onConfirm }) => {
                   type="checkbox"
                   checked={selectedAccessories.includes(accessory.code)}
                   onChange={() => toggleAccessorySelection(accessory.code)}
+                  disabled={accessory.code === "NO_ACC"}
                 />
                 {accessory.label}
               </label>
