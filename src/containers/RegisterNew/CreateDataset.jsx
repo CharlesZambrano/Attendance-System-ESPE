@@ -46,8 +46,22 @@ const CreateDataset = () => {
     accessories: [],
   };
   const navigate = useNavigate();
+
+  const expandedAccessories = selectedAccessoryCodes.flatMap((code) => {
+    switch (code) {
+      case "MAC_MAB":
+        return ["MAC", "MAB"];
+      case "REC_SUE":
+        return ["REC", "SUE"];
+      case "ALT_BAJ":
+        return ["ALT", "BAJ"];
+      default:
+        return [code];
+    }
+  });
+
   const selectedAccessories = accessories.filter((acc) =>
-    selectedAccessoryCodes.includes(acc.code)
+    expandedAccessories.includes(acc.code)
   );
 
   useEffect(() => {
