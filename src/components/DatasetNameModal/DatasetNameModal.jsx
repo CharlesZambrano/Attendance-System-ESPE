@@ -52,13 +52,14 @@ const DatasetNameModal = ({ show, onClose, onConfirm }) => {
           <Input
             type="text"
             value={datasetName}
-            onChange={(e) => setDatasetName(e.target.value)}
+            onChange={(newValue) => setDatasetName(newValue)}
             placeholder="Apellidos y Nombres"
             required
+            uppercase
           />
           <div className="accessory-selection">
             {accessories.map((accessory) => (
-              <label key={accessory.code}>
+              <label key={accessory.code} className="accessory-label">
                 <input
                   type="checkbox"
                   checked={selectedAccessories.includes(accessory.code)}

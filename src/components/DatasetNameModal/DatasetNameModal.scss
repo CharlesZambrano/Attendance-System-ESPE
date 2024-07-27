@@ -18,8 +18,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 400px;
+  width: 600px;
   max-width: 90%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   h2 {
     margin-bottom: 20px;
@@ -29,6 +30,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
+    box-sizing: border-box;
   }
 
   .accessory-selection {
@@ -36,19 +38,38 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 20px;
+    width: 100%;
+    text-align: left;
+
+    .accessory-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      width: 100%;
+    }
 
     label {
       display: flex;
       align-items: center;
+      font-size: 14px;
+      width: 100%;
+      word-wrap: break-word;
+    }
 
-      input {
-        margin-right: 10px;
-      }
+    input[type="checkbox"] {
+      margin-right: 10px;
+      margin-top: 0;
     }
   }
 
   .modal-buttons {
     display: flex;
     gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  input[style*="uppercase"] {
+    text-transform: uppercase;
   }
 }
