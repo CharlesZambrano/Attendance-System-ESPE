@@ -1,3 +1,5 @@
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraModal from "../../components/CameraModal/CameraModal";
@@ -164,13 +166,29 @@ const CreateDataset = () => {
     return null;
   };
 
-  const handleSaveDataset = () => {
+  const handleSaveDataset = async () => {
     const validationError = validateDataset();
     if (validationError) {
       setValidationMessage(validationError);
     } else {
       setValidationMessage("Captura del Dataset completada, guardelo");
       console.log("Dataset guardado exitosamente");
+
+      // Crear un archivo .zip con JSZip
+      const zip = new JSZip();
+      const imgFolder = zip.folder(datasetName.replace(/ /g, "_"));
+
+      capturedImages.forEach((image, index) => {
+        const imgData = image.src.replace(
+          /^data:image\/(png|jpeg);base64,/,
+          ""
+        );
+        imgFolder.file(`${image.title}.png`, imgData, { base64: true });
+      });
+
+      // Generar el archivo .zip y guardarlo
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, `${datasetName.replace(/ /g, "_")}.zip`);
     }
   };
 
