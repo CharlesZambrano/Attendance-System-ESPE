@@ -3,20 +3,40 @@ import Button from "../Common/Button";
 import Input from "../Common/Input";
 import "./DatasetNameModal.scss";
 
+const accessories = [
+  { label: "Gafas transparentes", code: "TRA" },
+  { label: "Gafas de sol", code: "SOL" },
+  { label: "Sombrero", code: "SOM" },
+  { label: "Gorra", code: "GOR" },
+  { label: "Mascarilla", code: "MAC_MAB" },
+  { label: "Cabello suelto y recogido", code: "REC_SUE" },
+  { label: "Cuello de camisa alto y bajo", code: "ALT_BAJ" },
+];
+
 const DatasetNameModal = ({ show, onClose, onConfirm }) => {
   const [datasetName, setDatasetName] = useState("");
+  const [selectedAccessories, setSelectedAccessories] = useState([]);
 
   useEffect(() => {
     if (!show) {
       setDatasetName("");
+      setSelectedAccessories([]);
     }
   }, [show]);
 
   const handleConfirm = (event) => {
     event.preventDefault();
     if (datasetName.trim() !== "") {
-      onConfirm(datasetName);
+      onConfirm(datasetName, selectedAccessories);
     }
+  };
+
+  const toggleAccessorySelection = (accessoryCode) => {
+    setSelectedAccessories((prevSelected) =>
+      prevSelected.includes(accessoryCode)
+        ? prevSelected.filter((code) => code !== accessoryCode)
+        : [...prevSelected, accessoryCode]
+    );
   };
 
   if (!show) return null;
@@ -33,6 +53,18 @@ const DatasetNameModal = ({ show, onClose, onConfirm }) => {
             placeholder="Apellidos y Nombres"
             required
           />
+          <div className="accessory-selection">
+            {accessories.map((accessory) => (
+              <label key={accessory.code}>
+                <input
+                  type="checkbox"
+                  checked={selectedAccessories.includes(accessory.code)}
+                  onChange={() => toggleAccessorySelection(accessory.code)}
+                />
+                {accessory.label}
+              </label>
+            ))}
+          </div>
           <div className="modal-buttons">
             <Button type="submit">Confirmar</Button>
             <Button onClick={onClose} type="button">
