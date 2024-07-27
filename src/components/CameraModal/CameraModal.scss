@@ -1,3 +1,5 @@
+// src/components/CameraModal/CameraModal.scss
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -19,9 +21,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 800px; // Increased width
+  width: 800px;
   max-width: 90%;
-  z-index: 1001; // Ensure modal is above overlay
+  z-index: 1001;
 }
 
 .close-icon {
@@ -47,7 +49,14 @@
   padding: 20px;
   border: 1px solid red;
   border-radius: 5px;
-  margin-bottom: 20px; // Add margin to ensure space between error message and button
+  margin-bottom: 20px;
+}
+
+.modal-instructions {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .modal-buttons {
@@ -56,12 +65,23 @@
   justify-content: center;
   width: 100%;
   padding-top: 15px;
+  gap: 20px;
 }
 
 .modal-top-buttons {
-  margin-top: auto;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
-  margin: 15px;
+}
+
+.captured-image-preview {
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
 }

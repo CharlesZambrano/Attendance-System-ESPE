@@ -1,20 +1,45 @@
+// src/containers/RegisterNew/CreateDataset.js
+
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraModal from "../../components/CameraModal/CameraModal";
 import CardGrid from "../../components/CardGrid/CardGrid";
 import Button from "../../components/Common/Button";
-import Chip from "../../components/Common/Chip";
 import Input from "../../components/Common/Input";
 import "./CreateDataset.scss";
 
+const expressions = [
+  { label: "Neutra", code: "NEU" },
+  { label: "Sonriendo", code: "SON" },
+  { label: "Seria", code: "SER" },
+  { label: "Enojada", code: "ENO" },
+  { label: "Sorprendida", code: "SOR" },
+  { label: "Triste", code: "TRI" },
+  { label: "Con ojos cerrados", code: "CER" },
+  { label: "Mirando hacia arriba", code: "ARR" },
+  { label: "Mirando hacia abajo", code: "ABA" },
+  { label: "Mirando hacia la izquierda", code: "IZQ" },
+  { label: "Mirando hacia la derecha", code: "DER" },
+];
+
+const accessories = [
+  { label: "Con gafas transparentes", code: "TRA" },
+  { label: "Con gafas de sol", code: "SOL" },
+  { label: "Con sombrero normal", code: "SOM" },
+  { label: "Con gorra", code: "GOR" },
+  { label: "Con mascarilla completamente puesta", code: "MAC" },
+  { label: "Con mascarilla debajo de la barbilla", code: "MAB" },
+  { label: "Pelo recogido", code: "REC" },
+  { label: "Pelo suelto", code: "SUE" },
+  { label: "Cuello alto", code: "ALT" },
+  { label: "Cuello bajo", code: "BAJ" },
+  { label: "Con maquillaje ligero", code: "LIG" },
+  { label: "Con maquillaje pesado", code: "PES" },
+];
+
 const CreateDataset = () => {
   const [showCameraModal, setShowCameraModal] = useState(false);
-  const [chips, setChips] = useState([
-    { label: "Label 1", selected: false },
-    { label: "Label 2", selected: false },
-    { label: "Label 3", selected: false },
-    { label: "Label 4", selected: false },
-  ]);
+  const [currentStep, setCurrentStep] = useState(0);
   const [capturedImages, setCapturedImages] = useState([]);
   const { state } = useLocation();
   const { datasetName } = state || { datasetName: "" };
@@ -32,40 +57,31 @@ const CreateDataset = () => {
     }
   }, [datasetName]);
 
-  const handleChipClick = (index) => {
-    setChips(
-      chips.map((chip, i) =>
-        i === index ? { ...chip, selected: !chip.selected } : chip
-      )
-    );
-  };
-
   const handleCaptureImage = (imageSrc) => {
     const sanitizedDatasetName = datasetName.replace(/ /g, "_");
+    const expressionCode =
+      expressions[Math.floor(currentStep / accessories.length)].code;
+    const accessoryCode = accessories[currentStep % accessories.length].code;
     const currentDate = new Date().toISOString().split("T")[0];
-    const newImage = {
+
+    const newImages = Array.from({ length: 3 }, (_, i) => ({
       src: imageSrc,
-      title: `${sanitizedDatasetName}_${capturedImages.length + 1}`,
+      title: `${sanitizedDatasetName}_${expressionCode}_${accessoryCode}_${
+        capturedImages.length + i + 1
+      }`,
       date: currentDate,
-    };
-    setCapturedImages([...capturedImages, newImage]);
+    }));
+
+    setCapturedImages([...capturedImages, ...newImages]);
+
+    setCurrentStep((prevStep) => prevStep + 1);
     setShowCameraModal(false);
   };
 
-  const handleImageClick = (index) => {
-    console.log("Imagen clickeada:", index);
-  };
-
-  const handleImageDelete = (index) => {
-    const sanitizedDatasetName = datasetName.replace(/ /g, "_");
-    setCapturedImages((prevImages) =>
-      prevImages
-        .filter((_, i) => i !== index)
-        .map((image, i) => ({
-          ...image,
-          title: `${sanitizedDatasetName}_${i + 1}`,
-        }))
-    );
+  const getCurrentInstruction = () => {
+    const expressionIndex = Math.floor(currentStep / accessories.length);
+    const accessoryIndex = currentStep % accessories.length;
+    return `${expressions[expressionIndex].label} ${accessories[accessoryIndex].label}`;
   };
 
   return (
@@ -83,21 +99,11 @@ const CreateDataset = () => {
         onChange={() => {}}
         readOnly
       />
-      <div className="filter-chip-carousel">
-        {chips.map((chip, index) => (
-          <Chip
-            key={index}
-            label={chip.label}
-            selected={chip.selected}
-            onClick={() => handleChipClick(index)}
-          />
-        ))}
-      </div>
       <div className="card-grid-container">
         <CardGrid
           images={capturedImages}
-          onImageClick={handleImageClick}
-          onImageDelete={handleImageDelete}
+          onImageClick={() => {}}
+          onImageDelete={() => {}}
         />
       </div>
       <div className="button-group">
@@ -110,6 +116,7 @@ const CreateDataset = () => {
         show={showCameraModal}
         onClose={() => setShowCameraModal(false)}
         onCapture={handleCaptureImage}
+        instruction={getCurrentInstruction()}
       />
     </div>
   );
