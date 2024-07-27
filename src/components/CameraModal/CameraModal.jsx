@@ -1,4 +1,4 @@
-// src/components/CameraModal/CameraModal.js
+// src/components/CameraModal/CameraModal.jsx
 
 import React, { useRef, useState } from "react";
 import { Camera } from "react-camera-pro";
@@ -11,7 +11,7 @@ const CameraModal = ({ show, onClose, onCapture, instruction }) => {
   const [cameraError, setCameraError] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-  if (!show) return null;
+  if (!show || !instruction) return null;
 
   const handleCapture = () => {
     if (cameraRef.current && !cameraError) {

@@ -1,3 +1,5 @@
+// src/containers/RegisterNew/CreateDataset.jsx
+
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraModal from "../../components/CameraModal/CameraModal";
@@ -81,6 +83,7 @@ const CreateDataset = () => {
 
     setCurrentStep((prevStep) => prevStep + 1);
     setShowCameraModal(false);
+    console.log("Image captured and saved:", newImages);
   };
 
   const getCurrentInstruction = () => {
@@ -91,7 +94,7 @@ const CreateDataset = () => {
     if (expressions[expressionIndex] && selectedAccessories[accessoryIndex]) {
       return `${expressions[expressionIndex].label} ${selectedAccessories[accessoryIndex].label}`;
     }
-    return "Captura completa";
+    return null; // Retornar null cuando todas las capturas están completas
   };
 
   const handleImageDelete = (index) => {
@@ -106,6 +109,8 @@ const CreateDataset = () => {
     );
 
     setCapturedImages(newImages);
+    setCurrentStep((prevStep) => prevStep - 1);
+    console.log("Image deleted:", deletedTitle);
   };
 
   const validateDataset = () => {
@@ -130,6 +135,20 @@ const CreateDataset = () => {
     } else {
       setValidationMessage("Captura del Dataset completada, guardelo");
       // Lógica para guardar el dataset
+      console.log("Dataset guardado exitosamente");
+    }
+  };
+
+  const handleValidationClose = () => {
+    setValidationMessage("");
+  };
+
+  const handleCaptureButtonClick = () => {
+    const instruction = getCurrentInstruction();
+    if (instruction) {
+      setShowCameraModal(true);
+    } else {
+      setValidationMessage("Captura del Dataset completada, guardelo");
     }
   };
 
@@ -156,12 +175,7 @@ const CreateDataset = () => {
         />
       </div>
       <div className="button-group">
-        <Button
-          onClick={() => setShowCameraModal(true)}
-          disabled={getCurrentInstruction() === "Captura completa"}
-        >
-          Capturar Foto
-        </Button>
+        <Button onClick={handleCaptureButtonClick}>Capturar Foto</Button>
         <Button onClick={handleSaveDataset}>Guardar Dataset</Button>
       </div>
       <CameraModal
@@ -173,7 +187,7 @@ const CreateDataset = () => {
       <ValidationModal
         show={validationMessage !== ""}
         message={validationMessage}
-        onClose={() => setValidationMessage("")}
+        onClose={handleValidationClose}
       />
     </div>
   );
