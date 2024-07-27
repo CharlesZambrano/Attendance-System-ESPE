@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../components/Common/Input";
-import Button from "../../components/Common/Button";
-import "./Login.scss";
-import espeLogo from "../../assets/images/espe-logo.png";
 import deccLogo from "../../assets/images/decc-logo.png";
+import espeLogo from "../../assets/images/espe-logo.png";
+import Button from "../../components/Common/Button";
+import Input from "../../components/Common/Input";
+import "./Login.scss";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -26,11 +28,20 @@ const Login = () => {
         <div className="login-box">
           <h2>Iniciar Sesión</h2>
           <form onSubmit={handleLogin}>
-            <Input label="Usuario:" type="text" name="username" required />
+            <Input
+              label="Usuario:"
+              type="text"
+              name="username"
+              value={username}
+              onChange={(newValue) => setUsername(newValue)}
+              required
+            />
             <Input
               label="Contraseña:"
               type="password"
               name="password"
+              value={password}
+              onChange={(newValue) => setPassword(newValue)}
               required
             />
             <Button type="submit">Ingresar</Button>

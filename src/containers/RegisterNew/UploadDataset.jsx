@@ -66,9 +66,9 @@ const UploadDataset = () => {
         name="nombre"
         placeholder="Ingresar los Apellidos y Nombres"
         value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
+        onChange={(newValue) => setNombre(newValue)}
       />
-      <Button onClick={handleUpload}>Entrenar Modelo</Button>
+      <Button onClick={handleUpload}>Subir Dataset</Button>
       <Modal
         show={showModal}
         onClose={closeModal}

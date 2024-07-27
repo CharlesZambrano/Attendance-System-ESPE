@@ -8,8 +8,6 @@ import "./RegisterNew.scss";
 
 const RegisterNew = () => {
   const [showModal, setShowModal] = useState(false);
-  const [datasetName, setDatasetName] = useState("");
-  const [selectedAccessories, setSelectedAccessories] = useState([]);
   const navigate = useNavigate();
 
   const handleCreateDataset = () => {
@@ -17,8 +15,6 @@ const RegisterNew = () => {
   };
 
   const handleConfirm = (name, accessories) => {
-    setDatasetName(name);
-    setSelectedAccessories(accessories);
     setShowModal(false);
     navigate("/register-new/create-dataset", {
       state: { datasetName: name, accessories },

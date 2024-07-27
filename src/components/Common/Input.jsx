@@ -10,7 +10,7 @@ const Input = ({
   readOnly = false,
   required = false,
   placeholder = "",
-  uppercase = false,
+  uppercase = false, // Nueva propiedad
 }) => (
   <div className="form-group">
     <label htmlFor={name}>{label}</label>
@@ -23,12 +23,12 @@ const Input = ({
         const newValue = uppercase
           ? e.target.value.toUpperCase()
           : e.target.value;
-        onChange(newValue);
+        onChange(newValue); // Pasamos directamente el valor
       }}
       readOnly={readOnly}
       required={required}
       placeholder={placeholder || undefined}
-      style={uppercase ? { textTransform: "uppercase" } : {}} // Aplicar estilo
+      style={uppercase ? { textTransform: "uppercase" } : {}}
     />
   </div>
 );

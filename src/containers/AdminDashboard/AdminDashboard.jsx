@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import PersonnelTable from "../../components/PersonnelTable/PersonnelTable";
 import "./AdminDashboard.scss";
 
 const AdminDashboard = ({ setIsLoading }) => {
-  const handleLoadData = () => {
+  const handleLoadData = useCallback(() => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 1);
-  };
+  }, [setIsLoading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleLoadData();
-  }, []);
+  }, [handleLoadData]);
 
   return (
     <div className="admin-dashboard">
