@@ -95,7 +95,8 @@ const CreateDataset = () => {
         capturedImages.length + i + 1
       }`,
       date: currentDate,
-      groupId,
+      // TODO CORREGIR GROUP ID PORQUE SE BORRA TODO
+      // groupId,
       width: 0,
       height: 0,
     }));

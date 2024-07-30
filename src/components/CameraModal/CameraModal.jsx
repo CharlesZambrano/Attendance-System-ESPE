@@ -1,5 +1,3 @@
-// src/components/CameraModal/CameraModal.jsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { Camera } from "react-camera-pro";
 import closeIcon from "../../assets/images/icons-salir-redondeado-64.png";
@@ -17,7 +15,7 @@ const CameraModal = ({
   const [cameraError, setCameraError] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [drawing, setDrawing] = useState(false);
-  const [boxes, setBoxes] = useState([]);
+  const [box, setBox] = useState(null);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
@@ -47,35 +45,40 @@ const CameraModal = ({
   };
 
   const handleAddImage = () => {
-    if (capturedImage) {
-      onCapture(capturedImage, boxes);
+    if (capturedImage && box) {
+      const annotation = {
+        bbox: {
+          xmin: Math.min(box.x, box.x + box.width),
+          ymin: Math.min(box.y, box.y + box.height),
+          xmax: Math.max(box.x, box.x + box.width),
+          ymax: Math.max(box.y, box.y + box.height),
+        },
+      };
+      onCapture(capturedImage, [annotation]);
       setCapturedImage(null);
-      setBoxes([]);
+      setBox(null);
     }
   };
 
   const handleMouseDown = (e) => {
-    const rect = e.target.getBoundingClientRect();
+    if (!capturedImage) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const startX = e.clientX - rect.left;
+    const startY = e.clientY - rect.top;
     setDrawing(true);
-    setBoxes((prevBoxes) => [
-      ...prevBoxes,
-      {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        width: 0,
-        height: 0,
-      },
-    ]);
+    setBox({ x: startX, y: startY, width: 0, height: 0 });
   };
 
   const handleMouseMove = (e) => {
-    if (!drawing) return;
-    const rect = e.target.getBoundingClientRect();
-    const newBoxes = [...boxes];
-    const currentBox = newBoxes[newBoxes.length - 1];
-    currentBox.width = e.clientX - rect.left - currentBox.x;
-    currentBox.height = e.clientY - rect.top - currentBox.y;
-    setBoxes(newBoxes);
+    if (!drawing || !box) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    setBox((prevBox) => ({
+      ...prevBox,
+      width: currentX - prevBox.x,
+      height: currentY - prevBox.y,
+    }));
     redrawCanvas();
   };
 
@@ -91,11 +94,11 @@ const CameraModal = ({
     img.src = capturedImage;
     img.onload = () => {
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      boxes.forEach((box) => {
+      if (box) {
         context.strokeStyle = "red";
         context.lineWidth = 2;
         context.strokeRect(box.x, box.y, box.width, box.height);
-      });
+      }
     };
   };
 
@@ -126,8 +129,8 @@ const CameraModal = ({
               <div className="captured-image-preview">
                 <canvas
                   ref={canvasRef}
-                  width={500}
-                  height={500}
+                  width={960}
+                  height={540}
                   onMouseDown={handleMouseDown}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
