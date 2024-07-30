@@ -96,16 +96,27 @@ const CreateDataset = () => {
       }`,
       date: currentDate,
       groupId,
+      width: 0,
+      height: 0,
     }));
 
-    setCapturedImages([...capturedImages, ...newImages]);
-    setAnnotations((prevAnnotations) => ({
-      ...prevAnnotations,
-      [newImages[0].title]: imageAnnotations,
-    }));
-    setCurrentStep((prevStep) => prevStep + 1);
-    setShowCameraModal(false);
-    console.log("Image captured and saved:", newImages);
+    // Load the image to get its natural width and height
+    const img = new Image();
+    img.onload = () => {
+      newImages.forEach((image) => {
+        image.width = img.naturalWidth;
+        image.height = img.naturalHeight;
+      });
+      setCapturedImages([...capturedImages, ...newImages]);
+      setAnnotations((prevAnnotations) => ({
+        ...prevAnnotations,
+        [newImages[0].title]: imageAnnotations,
+      }));
+      setCurrentStep((prevStep) => prevStep + 1);
+      setShowCameraModal(false);
+      console.log("Image captured and saved:", newImages);
+    };
+    img.src = imageSrc;
   };
 
   const getCurrentInstruction = () => {
@@ -170,21 +181,24 @@ const CreateDataset = () => {
       console.log("Dataset guardado exitosamente");
 
       const zip = new JSZip();
-      const imgFolder = zip.folder(datasetName.replace(/ /g, "_"));
+      const imgFolder = zip.folder("JPEGImages");
+      const annotationFolder = zip.folder("Annotations");
 
       capturedImages.forEach((image, index) => {
         const imgData = image.src.replace(
           /^data:image\/(png|jpeg);base64,/,
           ""
         );
-        imgFolder.file(`${image.title}.png`, imgData, { base64: true });
+        imgFolder.file(`${image.title}.jpeg`, imgData, { base64: true });
         const annotation = annotations[image.title] || [];
         const xmlContent = generatePascalVOCXML(image, annotation);
-        imgFolder.file(`${image.title}.xml`, xmlContent);
+        annotationFolder.file(`${image.title}.xml`, xmlContent);
       });
 
+      zip.file("labels.txt", datasetName);
+
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, `${datasetName.replace(/ /g, "_")}.zip`);
+      saveAs(content, `${datasetName}.zip`);
     }
   };
 
@@ -205,8 +219,8 @@ const CreateDataset = () => {
   const generatePascalVOCXML = (image, annotations) => {
     const xmlContent = `
     <annotation>
-      <folder>images</folder>
-      <filename>${image.title}.jpg</filename>
+      <folder>JPEGImages</folder>
+      <filename>${image.title}.jpeg</filename>
       <path>${image.src}</path>
       <source>
         <database>Unknown</database>
@@ -218,10 +232,11 @@ const CreateDataset = () => {
       </size>
       <segmented>0</segmented>
       ${annotations
+        .filter((annotation) => annotation.bbox)
         .map(
           (annotation) => `
         <object>
-          <name>${annotation.label}</name>
+          <name>${datasetName}</name>
           <pose>Unspecified</pose>
           <truncated>0</truncated>
           <difficult>0</difficult>
