@@ -42,12 +42,14 @@ const CreateDataset = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [capturedImages, setCapturedImages] = useState([]);
   const [validationMessage, setValidationMessage] = useState("");
+  const [annotations, setAnnotations] = useState({});
   const { state } = useLocation();
   const { datasetName, accessories: selectedAccessoryCodes } = state || {
     datasetName: "",
     accessories: [],
   };
   const navigate = useNavigate();
+  const [currentImageIndex, setCurrentImageIndex] = useState(null);
 
   const expandedAccessories = selectedAccessoryCodes.flatMap((code) => {
     switch (code) {
@@ -78,14 +80,13 @@ const CreateDataset = () => {
     }
   }, [datasetName]);
 
-  const handleCaptureImage = (imageSrc) => {
+  const handleCaptureImage = (imageSrc, imageAnnotations) => {
     const sanitizedDatasetName = datasetName.replace(/ /g, "_");
     const accessoryCode =
       selectedAccessories[Math.floor(currentStep / expressions.length)].code;
     const expressionCode = expressions[currentStep % expressions.length].code;
     const currentDate = new Date().toISOString().split("T")[0];
 
-    // Generar un ID único para el grupo de tres imágenes
     const groupId = `${sanitizedDatasetName}_${accessoryCode}_${expressionCode}_${new Date().getTime()}`;
 
     const newImages = Array.from({ length: 3 }, (_, i) => ({
@@ -94,11 +95,14 @@ const CreateDataset = () => {
         capturedImages.length + i + 1
       }`,
       date: currentDate,
-      groupId, // Agregar el groupId único
+      groupId,
     }));
 
     setCapturedImages([...capturedImages, ...newImages]);
-
+    setAnnotations((prevAnnotations) => ({
+      ...prevAnnotations,
+      [newImages[0].title]: imageAnnotations,
+    }));
     setCurrentStep((prevStep) => prevStep + 1);
     setShowCameraModal(false);
     console.log("Image captured and saved:", newImages);
@@ -131,20 +135,11 @@ const CreateDataset = () => {
 
   const handleImageDelete = (index) => {
     const groupIdToDelete = capturedImages[index].groupId;
-
-    console.log(`Attempting to delete images with groupId: ${groupIdToDelete}`);
-    console.log(`Current capturedImages before deletion:`, capturedImages);
-
-    // Eliminar solo las imágenes que coincidan con el groupId
     const newImages = capturedImages.filter(
       (image) => image.groupId !== groupIdToDelete
     );
 
     setCapturedImages(newImages);
-
-    console.log(`Deleted images with groupId: ${groupIdToDelete}`);
-    console.log(`Current capturedImages after deletion:`, newImages);
-
     const nextMissingStep = getNextMissingStep();
     if (nextMissingStep !== null) {
       setCurrentStep(nextMissingStep);
@@ -174,7 +169,6 @@ const CreateDataset = () => {
       setValidationMessage("Captura del Dataset completada, guardelo");
       console.log("Dataset guardado exitosamente");
 
-      // Crear un archivo .zip con JSZip
       const zip = new JSZip();
       const imgFolder = zip.folder(datasetName.replace(/ /g, "_"));
 
@@ -184,9 +178,11 @@ const CreateDataset = () => {
           ""
         );
         imgFolder.file(`${image.title}.png`, imgData, { base64: true });
+        const annotation = annotations[image.title] || [];
+        const xmlContent = generatePascalVOCXML(image, annotation);
+        imgFolder.file(`${image.title}.xml`, xmlContent);
       });
 
-      // Generar el archivo .zip y guardarlo
       const content = await zip.generateAsync({ type: "blob" });
       saveAs(content, `${datasetName.replace(/ /g, "_")}.zip`);
     }
@@ -204,6 +200,43 @@ const CreateDataset = () => {
     } else {
       setValidationMessage("Captura del Dataset completada, guardelo");
     }
+  };
+
+  const generatePascalVOCXML = (image, annotations) => {
+    const xmlContent = `
+    <annotation>
+      <folder>images</folder>
+      <filename>${image.title}.jpg</filename>
+      <path>${image.src}</path>
+      <source>
+        <database>Unknown</database>
+      </source>
+      <size>
+        <width>${image.width}</width>
+        <height>${image.height}</height>
+        <depth>3</depth>
+      </size>
+      <segmented>0</segmented>
+      ${annotations
+        .map(
+          (annotation) => `
+        <object>
+          <name>${annotation.label}</name>
+          <pose>Unspecified</pose>
+          <truncated>0</truncated>
+          <difficult>0</difficult>
+          <bndbox>
+            <xmin>${annotation.bbox.xmin}</xmin>
+            <ymin>${annotation.bbox.ymin}</ymin>
+            <xmax>${annotation.bbox.xmax}</xmax>
+            <ymax>${annotation.bbox.ymax}</ymax>
+          </bndbox>
+        </object>`
+        )
+        .join("")}
+    </annotation>
+    `;
+    return xmlContent.trim();
   };
 
   return (
@@ -224,7 +257,7 @@ const CreateDataset = () => {
       <div className="card-grid-container">
         <CardGrid
           images={capturedImages}
-          onImageClick={() => {}}
+          onImageClick={(index) => setCurrentImageIndex(index)}
           onImageDelete={handleImageDelete}
         />
       </div>
@@ -237,12 +270,23 @@ const CreateDataset = () => {
         onClose={() => setShowCameraModal(false)}
         onCapture={handleCaptureImage}
         instruction={getCurrentInstruction()}
+        datasetName={datasetName}
       />
       <ValidationModal
         show={validationMessage !== ""}
         message={validationMessage}
         onClose={handleValidationClose}
       />
+      {currentImageIndex !== null && (
+        <div className="annotation-container">
+          <img
+            id="capturedImage"
+            src={capturedImages[currentImageIndex].src}
+            alt="Captured"
+            style={{ display: "none" }}
+          />
+        </div>
+      )}
     </div>
   );
 };

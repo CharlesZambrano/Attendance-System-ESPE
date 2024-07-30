@@ -1,17 +1,38 @@
 // src/components/CameraModal/CameraModal.jsx
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Camera } from "react-camera-pro";
 import closeIcon from "../../assets/images/icons-salir-redondeado-64.png";
 import Button from "../Common/Button";
 import "./CameraModal.scss";
 
-const CameraModal = ({ show, onClose, onCapture, instruction }) => {
+const CameraModal = ({
+  show,
+  onClose,
+  onCapture,
+  instruction,
+  datasetName,
+}) => {
   const cameraRef = useRef(null);
   const [cameraError, setCameraError] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [drawing, setDrawing] = useState(false);
+  const [boxes, setBoxes] = useState([]);
+  const canvasRef = useRef(null);
+  const contextRef = useRef(null);
 
-  if (!show || !instruction) return null;
+  useEffect(() => {
+    if (capturedImage && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+      contextRef.current = context;
+      const img = new Image();
+      img.src = capturedImage;
+      img.onload = () => {
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+    }
+  }, [capturedImage]);
 
   const handleCapture = () => {
     if (cameraRef.current && !cameraError) {
@@ -27,10 +48,58 @@ const CameraModal = ({ show, onClose, onCapture, instruction }) => {
 
   const handleAddImage = () => {
     if (capturedImage) {
-      onCapture(capturedImage);
+      onCapture(capturedImage, boxes);
       setCapturedImage(null);
+      setBoxes([]);
     }
   };
+
+  const handleMouseDown = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    setDrawing(true);
+    setBoxes((prevBoxes) => [
+      ...prevBoxes,
+      {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        width: 0,
+        height: 0,
+      },
+    ]);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!drawing) return;
+    const rect = e.target.getBoundingClientRect();
+    const newBoxes = [...boxes];
+    const currentBox = newBoxes[newBoxes.length - 1];
+    currentBox.width = e.clientX - rect.left - currentBox.x;
+    currentBox.height = e.clientY - rect.top - currentBox.y;
+    setBoxes(newBoxes);
+    redrawCanvas();
+  };
+
+  const handleMouseUp = () => {
+    setDrawing(false);
+  };
+
+  const redrawCanvas = () => {
+    const canvas = canvasRef.current;
+    const context = contextRef.current;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    const img = new Image();
+    img.src = capturedImage;
+    img.onload = () => {
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      boxes.forEach((box) => {
+        context.strokeStyle = "red";
+        context.lineWidth = 2;
+        context.strokeRect(box.x, box.y, box.width, box.height);
+      });
+    };
+  };
+
+  if (!show || !instruction) return null;
 
   return (
     <div className="modal-overlay">
@@ -55,7 +124,14 @@ const CameraModal = ({ show, onClose, onCapture, instruction }) => {
             </div>
             {capturedImage ? (
               <div className="captured-image-preview">
-                <img src={capturedImage} alt="Captura previa" />
+                <canvas
+                  ref={canvasRef}
+                  width={500}
+                  height={500}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                />
               </div>
             ) : (
               <Camera
