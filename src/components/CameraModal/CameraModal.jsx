@@ -18,6 +18,10 @@ const CameraModal = ({
   const [box, setBox] = useState(null);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
     if (capturedImage && canvasRef.current) {
@@ -27,7 +31,13 @@ const CameraModal = ({
       const img = new Image();
       img.src = capturedImage;
       img.onload = () => {
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        setImageDimensions({
+          width: img.naturalWidth,
+          height: img.naturalHeight,
+        });
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
       };
     }
   }, [capturedImage]);
@@ -93,7 +103,7 @@ const CameraModal = ({
     const img = new Image();
     img.src = capturedImage;
     img.onload = () => {
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
       if (box) {
         context.strokeStyle = "red";
         context.lineWidth = 2;
@@ -129,11 +139,12 @@ const CameraModal = ({
               <div className="captured-image-preview">
                 <canvas
                   ref={canvasRef}
-                  width={960}
-                  height={540}
+                  width={1920}
+                  height={1080}
                   onMouseDown={handleMouseDown}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
+                  // style={{ maxWidth: "100%", maxHeight: "100%" }}
                 />
               </div>
             ) : (
@@ -146,6 +157,7 @@ const CameraModal = ({
                     "No camera device accessible. Please connect your camera or try a different browser.",
                 }}
                 onError={() => setCameraError(true)}
+                idealResolution={{ width: 1920, height: 1080 }}
               />
             )}
             <div className="modal-buttons">
